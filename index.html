@@ -1,0 +1,114 @@
+<main class="layout">
+  <aside class="left">
+    <section class="card">
+      <h2 class="section-title">⚙️ 시뮬레이션 기본설정</h2>
+      <div class="grid2">
+        <div class="field"><label>기술 비중 (%)</label><input id="evaluationWeight" type="number" value="70"></div>
+        <div class="field"><label>가격 비중 (%)</label><input id="priceWeight" type="number" value="30"></div>
+        <div class="field"><label>반복횟수</label><input id="samples" type="number" value="1000"></div>
+        <div class="field"><label>목표 승률 (%)</label><input id="targetWinRate" type="number" value="70"></div>
+        <div class="field"><label>경쟁사 수</label><input id="competitorCount" type="number" value="2" min="1" max="10"></div>
+        <div class="field">
+          <label>추천 기준</label>
+          <select id="recommendType">
+            <option value="expectedProfit">영업이익 최대</option>
+            <option value="contributionProfit">한계이익 최대</option>
+            <option value="winRate">승률 최대</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">🏢 SDS 조건</h2>
+      <div class="group-title">기술 점수 범위</div>
+      <div class="grid3">
+        <div class="field"><label>최소</label><input class="example-field" data-example="예시:93" id="sdsTechMin" value="예시:93"></div>
+        <div class="field"><label>유력</label><input class="example-field" data-example="예시:94" id="sdsTechLikely" value="예시:94"></div>
+        <div class="field"><label>최대</label><input class="example-field" data-example="예시:95" id="sdsTechMax" value="예시:95"></div>
+      </div>
+      <div class="group-title">입찰가 및 비용</div>
+      <div class="grid2">
+        <div class="field"><label>입찰가 최소</label><input class="example-field" data-example="예시:120" id="sdsBidMin" value="예시:120"></div>
+        <div class="field"><label>입찰가 최대</label><input class="example-field" data-example="예시:130" id="sdsBidMax" value="예시:130"></div>
+        <div class="field"><label>직접원가</label><input class="example-field" data-example="예시:124" id="directCost" value="예시:124"></div>
+        <div class="field"><label>간접비</label><input class="example-field" data-example="예시:5" id="indirectCost" value="예시:5"></div>
+      </div>
+    </section>
+
+    <div id="competitorInputs"></div>
+
+    <button class="run-btn" id="runBtn">시뮬레이션 실행</button>
+  </aside>
+
+  <section class="right">
+    <div style="display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap;">
+      <button class="download-btn" id="gptCopyBtn">GPT 분석용 결과 복사</button>
+      <button class="download-btn" id="downloadBtn">CSV Raw Data 다운로드</button>
+    </div>
+
+    <section class="kpis">
+      <div class="card kpi"><div class="label">추천 SDS 기술점수</div><div class="value" id="kpiTech" style="color:#0f766e">-</div></div>
+      <div class="card kpi"><div class="label">추천 입찰가</div><div class="value" id="kpiBid" style="color:#2563eb">-</div></div>
+      <div class="card kpi"><div class="label">예상 승률</div><div class="value" id="kpiWin" style="color:#16a34a">-</div></div>
+      <div class="card kpi"><div class="label">기대 영업이익</div><div class="value" id="kpiProfit" style="color:#7c3aed">-</div></div>
+      <div class="card kpi"><div class="label">기대 한계이익</div><div class="value" id="kpiContribution" style="color:#ea580c">-</div></div>
+    </section>
+
+    <section class="card">
+      <div class="summary">
+        <div class="summary-main">
+          <div class="small">추천 전략</div>
+          <div class="big" id="summaryTitle">-</div>
+        </div>
+        <div class="badge-box">
+          <b id="recommendLabel">-</b>
+          <span id="targetStatus">-</span>
+        </div>
+      </div>
+      <p id="summaryText" style="line-height:1.9;color:#334155;"></p>
+    </section>
+
+    <section class="card">
+      <h3>입찰가별 승률 변화</h3>
+      <svg class="chart small" id="winChart"></svg>
+    </section>
+
+    <section class="card">
+      <h3>SDS 기술점수 × 입찰가 승률 히트맵</h3>
+      <p style="color:#64748b;line-height:1.6;">행은 SDS 기술점수, 열은 SDS 입찰가입니다. 평균 행은 추천전략 산출에 사용되는 SDS 평균 기술점수 기준이며, 진한 초록색은 목표승률을 충족하는 Winning Zone입니다.</p>
+      <div class="heat-wrap" id="heatmap"></div>
+    </section>
+
+    <section class="card">
+      <h3>SDS 가격별 경쟁사별 승률</h3>
+      <svg class="chart small" id="competitorChart"></svg>
+    </section>
+
+    <section class="card">
+      <h3>입찰가별 기대 영업이익</h3>
+      <svg class="chart" id="profitChart"></svg>
+    </section>
+
+    <section class="card">
+      <h3>해석 코멘트</h3>
+      <div id="commentary"></div>
+    </section>
+
+    <section class="card">
+      <h3>종합점수 계산식</h3>
+      <div class="formula" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;color:#475569;line-height:1.7;font-size:14px;">
+        <b>가격점수 = 최저입찰가 ÷ 해당 입찰가 × 100</b><br>
+        <b>종합점수 = 기술점수 × 기술비중 + 가격점수 × 가격비중</b><br>
+        예: 기술 70%, 가격 30%이면 종합점수 = 기술점수 × 0.7 + 가격점수 × 0.3
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>SDS 입찰가별 상세 결과표</h3>
+      <div class="table-wrap">
+        <table id="detailTable"></table>
+      </div>
+    </section>
+  </section>
+</main>
