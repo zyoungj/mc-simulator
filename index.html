@@ -509,7 +509,7 @@ select.dist-select {
           </section>
 
           <section class="card">
-            <h3>SDS 기술점수 × 입찰가 승률 히트맵</h3>
+            <h3>SDS 승률 히트맵</h3>
             <p style="color:#64748b;line-height:1.6;">행은 SDS 기술점수, 열은 SDS 입찰가입니다. 평균 행은 추천전략 산출에 사용되는 SDS 평균 기술점수 기준이며, 진한 초록색은 목표승률을 충족하는 Winning Zone입니다.</p>
             <div class="heat-wrap" id="heatmap"></div>
           </section>
@@ -1026,7 +1026,7 @@ function runSimulation(input) {
     cells: bidRows.map(row => ({
       ...row,
       tech: expectedTech,
-      techLabel: `기술점수(평균) ${formatTechScore(expectedTech)}점`,
+      techLabel: `예상 기술점수 ${formatTechScore(expectedTech)}점`,
       isExpectedTech: true,
       winRate: row.winRate,
       avgScore: row.avgScore,
@@ -1187,7 +1187,7 @@ function renderHeatmap(result) {
   wrap.innerHTML = "";
   wrap.appendChild(grid);
   wrap.insertAdjacentHTML("beforeend", `<div class="legend">
-    <div><span style="background:#2563eb"></span>목표승률 ${result.inputs.targetWinRate}% 이상</div>
+    <div><span style="background:#2563eb"></span>목표승률 ${result.inputs.targetWinRate}% 이상(Winning Zone)</div>
     <div><span style="background:#059669"></span>50% 이상</div>
     <div><span style="background:#f59e0b"></span>30% 이상</div>
     <div><span style="background:#ffdd73"></span>10% 이상</div>
