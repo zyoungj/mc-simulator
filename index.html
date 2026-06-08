@@ -1150,11 +1150,11 @@ function renderResult(result) {
   renderTable(result, inputs.competitors);
 }
 function heatColor(winRate, target) {
-  if (winRate >= target) return "#15803d";
-  if (winRate >= 50) return "#65a30d";
+  if (winRate >= target) return "#2563eb";
+  if (winRate >= 50) return "#059669";
   if (winRate >= 30) return "#f59e0b";
-  if (winRate >= 10) return "#fb923c";
-  return "#e2e8f0";
+  if (winRate >= 10) return "#ffdd73";
+  return "#cbd5e1";
 }
 
 function renderHeatmap(result) {
@@ -1176,7 +1176,7 @@ function renderHeatmap(result) {
       const isRecommendedBid = cell.bid === recommendedBid;
       const isRecommendedCell = isRecommendedBid && cell.isExpectedTech;
       const bg = heatColor(cell.winRate, result.inputs.targetWinRate);
-      const color = cell.winRate >= 30 ? "white" : "#334155";
+      const color = cell.winRate >= 50 ? "white" : "#334155";
       const border = isRecommendedCell
         ? "3px solid #ef4444"
         : (isRecommendedBid ? "2px solid #f87171" : "1px solid rgba(15,23,42,.08)");
@@ -1187,11 +1187,11 @@ function renderHeatmap(result) {
   wrap.innerHTML = "";
   wrap.appendChild(grid);
   wrap.insertAdjacentHTML("beforeend", `<div class="legend">
-    <div><span style="background:#15803d"></span>목표승률 ${result.inputs.targetWinRate}% 이상</div>
-    <div><span style="background:#65a30d"></span>50% 이상</div>
+    <div><span style="background:#2563eb"></span>목표승률 ${result.inputs.targetWinRate}% 이상</div>
+    <div><span style="background:#059669"></span>50% 이상</div>
     <div><span style="background:#f59e0b"></span>30% 이상</div>
-    <div><span style="background:#fb923c"></span>10% 이상</div>
-    <div><span style="background:#e2e8f0"></span>10% 미만</div>
+    <div><span style="background:#ffdd73"></span>10% 이상</div>
+    <div><span style="background:#cbd5e1"></span>10% 미만</div>
     <div><span style="background:#eff6ff;border:1px solid #bfdbfe"></span>기술점수(평균) 행</div>
     <div><span style="background:#fef2f2;border:2px solid #f87171"></span>추천 입찰가 열</div>
     <div><span style="background:white;border:3px solid #ef4444"></span>추천 조합</div>
@@ -1203,7 +1203,6 @@ function renderCommentary(c) {
     <div class="comment-row"><b>목표승률 충족 여부</b><div>${c.targetWin}</div></div>
     <div class="comment-row"><b>승률 급변 구간</b><div>${c.winRateTrend}</div></div>
     <div class="comment-row"><b>추천 전략 관점</b><div>${c.strategyView}</div></div>
-    <div class="comment-row"><b>경쟁구도 해석</b><div>${c.competition}</div></div>
     <div class="quote"><b>수전위 보고용 한 줄</b>“${c.executive}”</div>
   `;
 }
