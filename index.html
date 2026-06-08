@@ -1021,7 +1021,7 @@ function runSimulation(input) {
   const expectedTech = bidRows.length ? bidRows[0].avgSdsTech : expectedValueFromSpec({ type: sds.techDistribution, min: sds.techMin, likely: sds.techLikely, max: sds.techMax, mean: sds.techMean, sd: sds.techSd });
   const expectedTechRow = {
     tech: expectedTech,
-    techLabel: `기술점수(평균) ${formatTechScore(expectedTech)}점`,
+    techLabel: `예상 기술점수 ${formatTechScore(expectedTech)}점`,
     isExpectedTech: true,
     cells: bidRows.map(row => ({
       ...row,
