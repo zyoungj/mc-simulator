@@ -213,15 +213,6 @@
       padding: 0 6px;
       border: 1px solid #bfdbfe;
     }
-    .heat-axis.recommended-bid {
-      color: #dc2626;
-      font-weight: 800;
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 8px;
-      padding: 4px 2px;
-      line-height: 1.25;
-    }
     .legend {
       display: flex;
       gap: 12px;
@@ -429,32 +420,13 @@ select.dist-select {
 
         <section class="card input-card">
           <h2 class="section-title">⚙️ 1. 기본설정</h2>
-          <p class="section-subtitle">평가비중, 기술점수 만점, 입찰가 분석 단위, 반복횟수, 목표승률과 추천 기준을 설정합니다.</p>
+          <p class="section-subtitle">평가비중, 반복횟수, 목표승률을 설정합니다.</p>
           <div class="grid2">
             <div class="field"><label>기술 비중 (%)</label><input id="evaluationWeight" type="number" value="70"></div>
             <div class="field"><label>가격 비중 (%)</label><input id="priceWeight" type="number" value="30"></div>
-            <div class="field"><label>기술점수 만점</label><input id="techMaxScore" type="number" value="100" min="1" step="0.1"></div>
-            <div class="field">
-              <label>입찰가 분석 단위</label>
-              <select id="sdsBidStep">
-                <option value="auto" selected>자동 추천</option>
-                <option value="0.1">0.1억</option>
-                <option value="0.5">0.5억</option>
-                <option value="1">1억</option>
-                <option value="2">2억</option>
-                <option value="5">5억</option>
-              </select>
-            </div>
             <div class="field"><label>경쟁사 수</label><input id="competitorCount" type="number" value="2" min="1" max="10"></div>
             <div class="field"><label>반복횟수</label><input id="samples" type="number" value="1000"></div>
             <div class="field"><label>목표 승률 (%)</label><input id="targetWinRate" type="number" value="70"></div>
-            <div class="field">
-              <label>추천 기준</label>
-              <select id="recommendType">
-                <option value="winningZoneMaxBid">Winning Zone 내 최고 입찰가</option>
-                <option value="winRate">승률 최대</option>
-              </select>
-            </div>
           </div>
         </section>
 
@@ -474,19 +446,19 @@ select.dist-select {
             </div>
             <div class="dist-fields" data-prefix="sdsTech" data-dist="Fixed" hidden>
               <div class="grid3">
-                <div class="field"><label>단일값</label><input class="example-field" data-example="예시:94" id="sdsTechFixed" value="예시:94"></div>
+                <div class="field"><label>단일값</label><input class="example-field" data-example="예시:66" id="sdsTechFixed" value="예시:66"></div>
               </div>
             </div>
             <div class="dist-fields" data-prefix="sdsTech" data-dist="Triangular">
               <div class="grid3">
-                <div class="field"><label>최소</label><input class="example-field" data-example="예시:93.5" id="sdsTechMin" value="예시:93.5"></div>
-                <div class="field"><label>유력</label><input class="example-field" data-example="예시:94" id="sdsTechLikely" value="예시:94"></div>
-                <div class="field"><label>최대</label><input class="example-field" data-example="예시:94" id="sdsTechMax" value="예시:94"></div>
+                <div class="field"><label>최소</label><input class="example-field" data-example="예시:65.5" id="sdsTechMin" value="예시:65.5"></div>
+                <div class="field"><label>유력</label><input class="example-field" data-example="예시:66" id="sdsTechLikely" value="예시:66"></div>
+                <div class="field"><label>최대</label><input class="example-field" data-example="예시:66" id="sdsTechMax" value="예시:66"></div>
               </div>
             </div>
             <div class="dist-fields" data-prefix="sdsTech" data-dist="Normal" hidden>
               <div class="grid2">
-                <div class="field"><label>평균</label><input class="example-field normal-mean" data-prefix="sdsTech" data-example="예시:94" id="sdsTechMean" value="예시:94"></div>
+                <div class="field"><label>평균</label><input class="example-field normal-mean" data-prefix="sdsTech" data-example="예시:66" id="sdsTechMean" value="예시:66"></div>
                 <div class="field"><label>표준편차</label><input class="example-field normal-sd" data-prefix="sdsTech" data-example="예시:1" id="sdsTechSd" value="예시:1"></div>
               </div>
               <div class="dist-help" id="sdsTechNormalHelp"></div>
@@ -498,6 +470,17 @@ select.dist-select {
             <div class="grid2">
               <div class="field"><label>입찰가 최소</label><input class="example-field" data-example="예시:120" id="sdsBidMin" value="예시:120"></div>
               <div class="field"><label>입찰가 최대</label><input class="example-field" data-example="예시:130" id="sdsBidMax" value="예시:130"></div>
+              <div class="field">
+                <label>입찰가 분석 단위</label>
+                <select id="sdsBidStep">
+                  <option value="auto" selected>자동 추천</option>
+                  <option value="0.1">0.1억</option>
+                  <option value="0.5">0.5억</option>
+                  <option value="1">1억</option>
+                  <option value="2">2억</option>
+                  <option value="5">5억</option>
+                </select>
+              </div>
             </div>
           </div>
         </section>
@@ -510,27 +493,10 @@ select.dist-select {
       <section class="right">
         <div class="result-action-buttons" style="display:flex; justify-content:flex-start; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
           <button class="download-btn" id="gptCopyBtn">GPT 분석용 결과 복사</button>
-          <button class="download-btn" id="downloadBtn">CSV Raw Data 다운로드</button>
+          <button class="download-btn" id="downloadBtn">Raw Data 엑셀 다운로드</button>
         </div>
 
         <div id="resultArea" style="display:none; flex-direction:column; gap:20px;">
-          <section class="card win-chart-card">
-            <h3>입찰가별 승률 변화</h3>
-            <svg class="chart small" id="winChart"></svg>
-          </section>
-
-          <section class="card">
-            <h3>SDS 승률 히트맵</h3>
-            <p style="color:#64748b;line-height:1.6;">행은 SDS 기술점수, 열은 SDS 입찰가입니다. 평균 행은 추천전략 산출에 사용되는 SDS 평균 기술점수 기준이며, 진한 초록색은 목표승률을 충족하는 Winning Zone입니다.</p>
-            <div class="heat-wrap" id="heatmap"></div>
-          </section>
-
-          <section class="kpis">
-            <div class="card kpi"><div class="label">예상 기술점수</div><div class="value" id="kpiTech" style="color:#0f766e">-</div></div>
-            <div class="card kpi"><div class="label">추천 입찰가</div><div class="value" id="kpiBid" style="color:#2563eb">-</div></div>
-            <div class="card kpi"><div class="label">예상 승률</div><div class="value" id="kpiWin" style="color:#16a34a">-</div></div>
-          </section>
-
           <section class="card">
             <h3>SDS 입찰가별 상세 결과표</h3>
             <div class="table-wrap">
@@ -538,23 +504,15 @@ select.dist-select {
             </div>
           </section>
 
-          <section class="card">
-            <div class="summary">
-              <div class="summary-main">
-                <div class="small">추천 전략</div>
-                <div class="big" id="summaryTitle">-</div>
-              </div>
-              <div class="badge-box">
-                <b id="recommendLabel">-</b>
-                <span id="targetStatus">-</span>
-              </div>
-            </div>
-            <p id="summaryText" style="line-height:1.9;color:#334155;"></p>
+          <section class="card win-chart-card">
+            <h3>입찰가별 승률 변화</h3>
+            <svg class="chart small" id="winChart"></svg>
           </section>
 
           <section class="card">
-            <h3>해석 코멘트</h3>
-            <div id="commentary"></div>
+            <h3>SDS 승률 히트맵</h3>
+            <p style="color:#64748b;line-height:1.6;">행은 SDS 기술점수, 열은 SDS 입찰가입니다. 평균 행은 SDS 평균 기술점수 기준이며, 진한 파랑색은 목표승률을 충족하는 Winning Zone입니다.</p>
+            <div class="heat-wrap" id="heatmap"></div>
           </section>
 
           <section class="card">
@@ -563,7 +521,7 @@ select.dist-select {
               <b>기술환산점수 = 기술점수 ÷ 기술점수 만점 × 100</b><br>
               <b>가격점수 = 최저입찰가 ÷ 해당 입찰가 × 100</b><br>
               <b>종합점수 = 기술환산점수 × 기술비중 + 가격점수 × 가격비중</b><br>
-              예: 기술점수 만점 30점, SDS 기술점수 29점, 기술 70%, 가격 30%이면 기술환산점수는 96.7점이고 종합점수 = 96.7 × 0.7 + 가격점수 × 0.3
+              예: 기술점수 만점 70점, SDS 기술점수 65점, 기술 70%, 가격 30%이면 기술환산점수는 92.9점이고 종합점수 = 92.9 × 0.7 + 가격점수 × 0.3
             </div>
           </section>
 </div>
@@ -666,15 +624,6 @@ function makeHeatTechValues(min, max) {
 
   return Array.from(values).sort((a, b) => b - a);
 }
-function getRecommendKey(type) {
-  if (type === "winRate") return "winRate";
-  return "bid";
-}
-function getRecommendLabel(type) {
-  if (type === "winRate") return "승률 최대";
-  return "Winning Zone 내 최고 입찰가";
-}
-
 function setupExampleFields() {
   document.querySelectorAll(".example-field").forEach(input => {
     input.classList.add("example");
@@ -795,8 +744,8 @@ function renderCompetitorInputs() {
   container.innerHTML = "";
   for (let i = 0; i < count; i++) {
     const defaults = i === 0
-      ? { name: "경쟁사 1", techDistribution: "Triangular", bidDistribution: "Triangular", techMin: "예시:90", techLikely: "예시:91", techMax: "예시:92", techFixed: "예시:91", techMean: "예시:91", techSd: "예시:1", bidMin: "예시:111", bidLikely: "예시:112", bidMax: "예시:115", bidFixed: "예시:112", bidMean: "예시:110", bidSd: "예시:2" }
-      : { name: `경쟁사 ${i + 1}`, techDistribution: "Triangular", bidDistribution: "Triangular", techMin: "예시:93", techLikely: "예시:93", techMax: "예시:94", techFixed: "예시:94", techMean: "예시:94", techSd: "예시:1", bidMin: "예시:123", bidLikely: "예시:124", bidMax: "예시:127", bidFixed: "예시:124", bidMean: "예시:110", bidSd: "예시:2" };
+      ? { name: "경쟁사 1", techDistribution: "Triangular", bidDistribution: "Triangular", techMin: "예시:63", techLikely: "예시:63.5", techMax: "예시:64", techFixed: "예시:63.5", techMean: "예시:63.5", techSd: "예시:1", bidMin: "예시:111", bidLikely: "예시:112", bidMax: "예시:115", bidFixed: "예시:112", bidMean: "예시:110", bidSd: "예시:2" }
+      : { name: `경쟁사 ${i + 1}`, techDistribution: "Triangular", bidDistribution: "Triangular", techMin: "예시:65", techLikely: "예시:65", techMax: "예시:65.5", techFixed: "예시:65", techMean: "예시:65", techSd: "예시:1", bidMin: "예시:123", bidLikely: "예시:124", bidMax: "예시:127", bidFixed: "예시:124", bidMean: "예시:110", bidSd: "예시:2" };
     const data = { ...defaults, ...(existing[i] || {}) };
     const techPrefix = `comp${i}Tech`;
     const bidPrefix = `comp${i}Bid`;
@@ -897,11 +846,10 @@ function collectInputs() {
   return {
     evaluationWeight: n(document.getElementById("evaluationWeight").value, 70),
     priceWeight: n(document.getElementById("priceWeight").value, 30),
-    techMaxScore: Math.max(n(document.getElementById("techMaxScore")?.value, 100), 0.0001),
+    techMaxScore: Math.max(n(document.getElementById("evaluationWeight").value, 70), 0.0001),
     bidStepSetting: document.getElementById("sdsBidStep")?.value || "auto",
     samples: n(document.getElementById("samples").value, 1000),
     targetWinRate: n(document.getElementById("targetWinRate").value, 70),
-    recommendType: document.getElementById("recommendType").value,
     sds: {
       techDistribution: sdsTech.type,
       techMin: sdsTech.min,
@@ -917,7 +865,7 @@ function collectInputs() {
 }
 
 function runSimulation(input) {
-  const { sds, competitors, samples, evaluationWeight, priceWeight, targetWinRate, recommendType, techMaxScore, bidStepSetting } = input;
+  const { sds, competitors, samples, evaluationWeight, priceWeight, targetWinRate, techMaxScore, bidStepSetting } = input;
   const safeSamples = Math.max(100, Math.round(samples || 100));
   const safeTechMaxScore = Math.max(Number(techMaxScore) || 100, 0.0001);
   const toTechScore100 = tech => (tech / safeTechMaxScore) * 100;
@@ -934,6 +882,7 @@ function runSimulation(input) {
     bidLabel: `${currency(bid)}억`,
     wins: 0,
     competitorWins: Array(competitors.length).fill(0),
+    competitorTotalScores: Array(competitors.length).fill(0),
     totalScore: 0,
     sdsTechSum: 0,
   }));
@@ -978,6 +927,9 @@ function runSimulation(input) {
 
       stat.totalScore += sdsTotalScore;
       stat.sdsTechSum += sdsTech;
+      compDetails.forEach((comp, idx) => {
+        stat.competitorTotalScores[idx] += comp.totalScore;
+      });
       if (isSdsWin) {
         stat.wins++;
       } else if (competitorWinnerIndex >= 0) {
@@ -991,6 +943,7 @@ function runSimulation(input) {
         SDS입찰가_억원: Number(stat.bid.toFixed(2)),
         SDS가격점수: Number(sdsPriceScore.toFixed(4)),
         SDS총점: Number(sdsTotalScore.toFixed(4)),
+        최저입찰가_억원: Number(minBid.toFixed(4)),
         경쟁사최고점: Number(bestCompetitorScore.toFixed(4)),
         승패여부: isSdsWin ? "승" : "패",
         낙찰자: isSdsWin ? "SDS" : compDetails[competitorWinnerIndex]?.name || "-",
@@ -1017,22 +970,23 @@ function runSimulation(input) {
   }
 
   const bidRows = bidStats.map(stat => {
-    const rates = {};
-    stat.competitorWins.forEach((wins, idx) => rates[`competitor${idx + 1}`] = Number(((wins / safeSamples) * 100).toFixed(1)));
+    const competitorMetrics = {};
+    stat.competitorWins.forEach((wins, idx) => {
+      competitorMetrics[`competitor${idx + 1}`] = Number(((wins / safeSamples) * 100).toFixed(1));
+      competitorMetrics[`competitor${idx + 1}AvgScore`] = Number(((stat.competitorTotalScores[idx] || 0) / safeSamples).toFixed(2));
+    });
     return {
       bid: stat.bid,
       bidLabel: stat.bidLabel,
       avgSdsTech: Number((stat.sdsTechSum / safeSamples).toFixed(2)),
       winRate: Number(((stat.wins / safeSamples) * 100).toFixed(1)),
       avgScore: Number((stat.totalScore / safeSamples).toFixed(2)),
-      ...rates,
+      ...competitorMetrics,
     };
   });
 
   const eligible = bidRows.filter(row => row.winRate >= targetWinRate);
-  const pool = eligible.length ? eligible : bidRows;
-  const key = eligible.length ? getRecommendKey(recommendType) : "winRate";
-  const best = pool.reduce((prev, cur) => cur[key] > prev[key] ? cur : prev, pool[0] || bidRows[0]);
+  const best = bidRows.reduce((prev, cur) => cur.winRate > prev.winRate ? cur : prev, bidRows[0]);
 
   const heatmap = heatStats.map(heatRow => ({
     tech: heatRow.tech,
@@ -1081,11 +1035,8 @@ function runSimulation(input) {
   const commentary = {
     targetWin: eligible.length ? `목표승률 ${targetWinRate}%를 충족하는 Winning Zone이 형성되었습니다.` : `목표승률 ${targetWinRate}%를 충족하는 Winning Zone은 형성되지 않았습니다.`,
     winRateTrend: highDropRow ? `SDS 평균 승률은 ${currency(maxWinRow.bid)}억 구간에서 가장 높으며, ${currency(highDropRow.bid)}억 이상부터 급격히 하락합니다.` : "SDS 평균 승률 변화폭이 상대적으로 완만하며 특정 급락구간은 제한적으로 나타났습니다.",
-    strategyView: eligible.length
-      ? `목표승률을 충족하는 구간 중 ${currency(best.bid)}억이 추천 입찰가로 선정되었습니다.`
-      : `목표승률을 충족하는 구간이 없어 승률이 가장 높은 ${currency(best.bid)}억이 추천 입찰가로 선정되었습니다.`,
     competition: dominantCompetitor ? `경쟁구도는 사실상 ${dominantCompetitor.name} 우세 구조로 분석되며, 기술 및 가격 경쟁력이 상대적으로 높게 형성되었습니다.` : "경쟁구도 분석을 위한 데이터가 충분하지 않습니다.",
-    executive: eligible.length ? `현 경쟁구도에서는 ${currency(best.bid)}억 수준이 현실적 최적점으로 판단됩니다.` : `현 경쟁구도에서는 저가 진입 외 승산이 제한적이며, ${currency(best.bid)}억 수준이 현실적 최적점으로 판단됩니다.`,
+    executive: eligible.length ? `목표승률을 충족하는 Winning Zone 구간을 확인했습니다.` : `목표승률을 충족하는 Winning Zone은 확인되지 않았습니다.`,
   };
 
   return {
@@ -1167,14 +1118,6 @@ function renderResult(result) {
   latestResult = result;
   const { best, inputs } = result;
   document.getElementById("resultArea").style.display = "flex";
-  document.getElementById("kpiTech").textContent = `${formatTechScore(result.selectedTech)}점`;
-  document.getElementById("kpiBid").textContent = `${currency(result.selectedBid)}억원`;
-  document.getElementById("kpiWin").textContent = pct(result.winRate);
-  document.getElementById("summaryTitle").textContent = `${formatTechScore(result.selectedTech)}점 / ${currency(best.bid)}억원`;
-  document.getElementById("recommendLabel").textContent = getRecommendLabel(inputs.recommendType);
-  document.getElementById("targetStatus").textContent = `목표승률 ${inputs.targetWinRate}% ${result.usedTargetFilter ? "충족" : "미충족"}`;
-  document.getElementById("summaryText").innerHTML = `현재 추천 조합은 SDS 평균 기술점수 <strong>${formatTechScore(result.selectedTech)}점</strong>/${currency(inputs.techMaxScore || 100)}점 만점, 입찰가 <strong>${currency(best.bid)}억원</strong>입니다. 예상 승률은 <strong>${best.winRate}%</strong>입니다. SDS 입찰가는 약 <strong>${result.bidStep}억원</strong> 단위로 나누어 평가했습니다.`;
-
   const winSeries = [
     { key: "winRate", name: "SDS 승률", color: "#16a34a" },
     ...inputs.competitors.map((comp, idx) => ({
@@ -1184,9 +1127,8 @@ function renderResult(result) {
     }))
   ];
   drawLineChart("winChart", result.bidCurve, winSeries, { yMin: 0, yMax: 100, yFormat: v => `${Math.round(v)}%`, referenceY: inputs.targetWinRate });
-  renderHeatmap(result);
-  renderCommentary(result.commentary);
   renderTable(result, inputs.competitors);
+  renderHeatmap(result);
 }
 function heatColor(winRate, target) {
   // High-contrast heatmap palette
@@ -1205,28 +1147,18 @@ function heatColor(winRate, target) {
 function renderHeatmap(result) {
   const wrap = document.getElementById("heatmap");
   const bids = result.bidCurve;
-  const recommendedBid = result.best?.bid;
   const grid = document.createElement("div");
   grid.className = "heat-grid";
   grid.style.gridTemplateColumns = `120px repeat(${bids.length}, minmax(56px, 1fr))`;
   grid.style.minWidth = `${Math.max(760, 120 + bids.length * 60)}px`;
-  grid.innerHTML = `<div></div>${bids.map(b => {
-    const isRecommendedBid = b.bid === recommendedBid;
-    return `<div class="heat-axis ${isRecommendedBid ? "recommended-bid" : ""}">${isRecommendedBid ? "추천<br>" : ""}${b.bidLabel}</div>`;
-  }).join("")}`;
+  grid.innerHTML = `<div></div>${bids.map(b => `<div class="heat-axis">${b.bidLabel}</div>`).join("")}`;
 
   result.heatmap.forEach(row => {
     grid.innerHTML += `<div class="heat-y ${row.isExpectedTech ? "expected-tech" : ""}">${row.techLabel}</div>`;
     row.cells.forEach(cell => {
-      const isRecommendedBid = cell.bid === recommendedBid;
-      const isRecommendedCell = isRecommendedBid && cell.isExpectedTech;
       const bg = heatColor(cell.winRate, result.inputs.targetWinRate);
       const color = (cell.winRate >= result.inputs.targetWinRate || cell.winRate >= 50) ? "white" : "#1f2937";
-      const border = isRecommendedCell
-        ? "3px solid #ef4444"
-        : (isRecommendedBid ? "2px solid #f87171" : "1px solid rgba(15,23,42,.08)");
-      const label = isRecommendedCell ? `★ ${cell.winRate}%` : `${cell.winRate}%`;
-      grid.innerHTML += `<div class="heat-cell" style="background:${bg};color:${color};border:${border}" title="${cell.techLabel} / ${cell.bidLabel}: 승률 ${cell.winRate}%">${label}</div>`;
+      grid.innerHTML += `<div class="heat-cell" style="background:${bg};color:${color};border:1px solid rgba(15,23,42,.08)" title="${cell.techLabel} / ${cell.bidLabel}: 승률 ${cell.winRate}%">${cell.winRate}%</div>`;
     });
   });
   wrap.innerHTML = "";
@@ -1238,8 +1170,6 @@ function renderHeatmap(result) {
     <div><span style="background:#FFDD73"></span>10% 이상</div>
     <div><span style="background:#cbd5e1"></span>10% 미만</div>
     <div><span style="background:#eff6ff;border:1px solid #bfdbfe"></span>기술점수(평균) 행</div>
-    <div><span style="background:#fef2f2;border:2px solid #f87171"></span>추천 입찰가 열</div>
-    <div><span style="background:white;border:3px solid #ef4444"></span>추천 조합</div>
   </div>`);
 }
 
@@ -1247,7 +1177,6 @@ function renderCommentary(c) {
   document.getElementById("commentary").innerHTML = `
     <div class="comment-row"><b>목표승률 충족 여부</b><div>${c.targetWin}</div></div>
     <div class="comment-row"><b>승률 급변 구간</b><div>${c.winRateTrend}</div></div>
-    <div class="comment-row"><b>추천 전략 관점</b><div>${c.strategyView}</div></div>
     <div class="quote"><b>수전위 보고용 한 줄</b>“${c.executive}”</div>
   `;
 }
@@ -1256,8 +1185,8 @@ function renderTable(result, competitors) {
   const table = document.getElementById("detailTable");
   table.innerHTML = `
     <thead><tr>
-      <th>SDS입찰가</th><th>SDS승률(%)</th><th>SDS평균종합점수</th><th>Winning Zone</th><th>추천</th>
-      ${competitors.map(c => `<th>${c.name} 승률</th>`).join("")}
+      <th>SDS입찰가</th><th>SDS승률(%)</th><th>SDS평균종합점수</th><th>Winning Zone</th>
+      ${competitors.map(c => `<th>${c.name} 승률</th><th>${c.name} 평균종합점수</th>`).join("")}
     </tr></thead>
     <tbody>
       ${result.tableRows.map(row => `<tr>
@@ -1265,8 +1194,7 @@ function renderTable(result, competitors) {
         <td>${row.winRate}%</td>
         <td>${row.avgScore}</td>
         <td>${row.winRate >= result.inputs.targetWinRate ? "Y" : "N"}</td>
-        <td>${row.bid === result.best.bid ? "★" : ""}</td>
-        ${competitors.map((_, idx) => `<td>${row[`competitor${idx + 1}`] ?? 0}%</td>`).join("")}
+        ${competitors.map((_, idx) => `<td>${row[`competitor${idx + 1}`] ?? 0}%</td><td>${row[`competitor${idx + 1}AvgScore`] ?? 0}</td>`).join("")}
       </tr>`).join("")}
     </tbody>
   `;
@@ -1279,26 +1207,72 @@ function normalizeTriangularInput(min, likely, max) {
   return { min: safeMin, likely: safeLikely, max: safeMax };
 }
 
+function buildDistributionPayload(type, spec) {
+  const dist = type || spec?.type || "Triangular";
+  if (dist === "Fixed") {
+    return { distribution: "Fixed", fixed: spec.likely };
+  }
+  if (dist === "Normal") {
+    return { distribution: "Normal", mean: spec.mean, sd: spec.sd };
+  }
+  return { distribution: "Triangular", min: spec.min, likely: spec.likely, max: spec.max };
+}
+
+function makeInputPayload(input) {
+  return {
+    sds: {
+      techScore: buildDistributionPayload(input.sds.techDistribution, {
+        min: input.sds.techMin,
+        likely: input.sds.techLikely,
+        max: input.sds.techMax,
+        mean: input.sds.techMean,
+        sd: input.sds.techSd
+      }),
+      bidRange: { min: input.sds.bidMin, max: input.sds.bidMax }
+    },
+    competitors: (input.competitors || []).map(comp => ({
+      name: comp.name,
+      techScore: buildDistributionPayload(comp.techDistribution || comp.distribution, {
+        min: comp.techMin,
+        likely: comp.techLikely,
+        max: comp.techMax,
+        mean: comp.techMean,
+        sd: comp.techSd
+      }),
+      bid: buildDistributionPayload(comp.bidDistribution || comp.distribution, {
+        min: comp.bidMin,
+        likely: comp.bidLikely,
+        max: comp.bidMax,
+        mean: comp.bidMean,
+        sd: comp.bidSd
+      })
+    }))
+  };
+}
+
 function buildGptPriceSummary(result) {
   if (!result || !result.tableRows) return [];
   const targetWinRate = result.inputs?.targetWinRate ?? 70;
-  const recommendedBid = result.best?.bid;
+  const maxWinBid = result.best?.bid;
 
   return result.tableRows.map(row => {
-    const competitorWinRates = {};
+    const competitorResults = {};
     (result.inputs?.competitors || []).forEach((comp, idx) => {
-      competitorWinRates[comp.name || `경쟁사 ${idx + 1}`] = row[`competitor${idx + 1}`] ?? 0;
+      competitorResults[comp.name || `경쟁사 ${idx + 1}`] = {
+        winRatePct: row[`competitor${idx + 1}`] ?? 0,
+        avgScore: row[`competitor${idx + 1}AvgScore`] ?? 0
+      };
     });
 
     return {
       bid: row.bid,
       bidLabel: row.bidLabel,
-      winRatePct: row.winRate,
+      sdsWinRatePct: row.winRate,
       avgSdsTech: round1(row.avgSdsTech),
-      avgScore: row.avgScore,
-      competitorWinRates,
+      sdsAvgScore: row.avgScore,
+      competitorResults,
       winningZone: row.winRate >= targetWinRate,
-      recommended: row.bid === recommendedBid
+      maxWinRateRow: row.bid === maxWinBid
     };
   });
 }
@@ -1306,58 +1280,22 @@ function buildGptPriceSummary(result) {
 function buildGptPayload(result) {
   if (!result) return null;
   const input = result.inputs || collectInputs();
-
-  const competitors = (input.competitors || []).map(comp => ({
-    name: comp.name,
-    techDistribution: comp.techDistribution || comp.distribution,
-    bidDistribution: comp.bidDistribution || comp.distribution,
-    techMin: comp.techMin,
-    techLikely: comp.techLikely,
-    techMax: comp.techMax,
-    techMean: comp.techMean,
-    techSd: comp.techSd,
-    bidMin: comp.bidMin,
-    bidLikely: comp.bidLikely,
-    bidMax: comp.bidMax,
-    bidMean: comp.bidMean,
-    bidSd: comp.bidSd
-  }));
-
+  const inputPayload = makeInputPayload(input);
   const priceSummary = buildGptPriceSummary(result);
   const winningZoneRows = priceSummary.filter(row => row.winningZone);
-  const recommendedRow = priceSummary.find(row => row.recommended) || priceSummary.find(row => row.bid === result.best?.bid);
-
   return {
     type: "bid_monte_carlo_result_for_gpt_analysis",
     generatedAt: new Date().toISOString(),
-    requestToGpt: "아래 Monte Carlo 결과를 바탕으로 Executive Summary, Winning Zone, 추천 제안가, 주요 리스크, 수전위 보고용 코멘트를 작성해줘.",
+    requestToGpt: "아래 Monte Carlo 결과를 바탕으로 Executive Summary, Winning Zone, 주요 리스크, 수전위 보고용 코멘트를 작성해줘.",
     settings: {
       evaluationWeight: input.evaluationWeight,
       priceWeight: input.priceWeight,
       techMaxScore: input.techMaxScore,
       bidStepSetting: input.bidStepSetting,
       samples: input.samples,
-      targetWinRatePct: input.targetWinRate,
-      recommendType: input.recommendType
+      targetWinRatePct: input.targetWinRate
     },
-    sds: {
-      techDistribution: input.sds.techDistribution,
-      techMin: input.sds.techMin,
-      techLikely: input.sds.techLikely,
-      techMax: input.sds.techMax,
-      techMean: input.sds.techMean,
-      techSd: input.sds.techSd,
-      bidMin: input.sds.bidMin,
-      bidMax: input.sds.bidMax
-    },
-    competitors,
-    recommendation: {
-      selectedTechScore: round1(result.selectedTech),
-      selectedBid: result.selectedBid,
-      selectedBidLabel: result.selectedBidLabel,
-      winRatePct: result.best?.winRate,
-      selectedRow: recommendedRow || null
-    },
+    inputs: inputPayload,
     winningZone: {
       usedTargetFilter: result.usedTargetFilter,
       targetWinRatePct: input.targetWinRate,
@@ -1384,42 +1322,101 @@ async function copyGptPayload() {
   const payload = buildGptPayload(latestResult);
   const text = JSON.stringify(payload, null, 2);
   try {
-    await navigator.clipboard.writeText(text);
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.left = "-9999px";
+      area.style.top = "0";
+      document.body.appendChild(area);
+      area.focus();
+      area.select();
+      const copied = document.execCommand("copy");
+      document.body.removeChild(area);
+      if (!copied) throw new Error("clipboard fallback failed");
+    }
     alert(`GPT 분석용 결과를 복사했습니다.\npriceSummary ${payload.priceSummary.length}개 행이 포함되었습니다.`);
   } catch (e) {
-    const area = document.createElement("textarea");
-    area.value = text;
-    area.style.position = "fixed";
-    area.style.left = "-9999px";
-    document.body.appendChild(area);
-    area.focus();
-    area.select();
-    document.execCommand("copy");
-    document.body.removeChild(area);
-    alert(`GPT 분석용 결과를 복사했습니다.\npriceSummary ${payload.priceSummary.length}개 행이 포함되었습니다.`);
+    console.error(e);
+    alert("브라우저 보안정책으로 자동 복사에 실패했습니다. HTTPS 환경 또는 로컬 파일 권한을 확인해주세요.");
   }
 }
-
 
 function escapeCsv(value) {
   const text = value === undefined || value === null ? "" : String(value);
   return `"${text.replace(/"/g, '""')}"`;
 }
-function downloadCsv(rows) {
-  if (!rows || !rows.length) {
-    alert("다운로드할 Raw Data가 없습니다.");
-    return;
-  }
+
+function xmlEscape(value) {
+  return String(value === undefined || value === null ? "" : value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function excelCell(value) {
+  const isNumber = typeof value === "number" && Number.isFinite(value);
+  const type = isNumber ? "Number" : "String";
+  const data = isNumber ? value : xmlEscape(value);
+  return `<Cell><Data ss:Type="${type}">${data}</Data></Cell>`;
+}
+
+function buildDetailDownloadRows(result) {
+  if (!result || !result.tableRows) return [];
+  return result.tableRows.map(row => {
+    const out = {
+      SDS입찰가: row.bidLabel,
+      "SDS승률(%)": row.winRate,
+      SDS평균종합점수: row.avgScore,
+      "Winning Zone": row.winRate >= result.inputs.targetWinRate ? "Y" : "N"
+    };
+    (result.inputs?.competitors || []).forEach((comp, idx) => {
+      const name = comp.name || `경쟁사 ${idx + 1}`;
+      out[`${name} 승률`] = row[`competitor${idx + 1}`] ?? 0;
+      out[`${name} 평균종합점수`] = row[`competitor${idx + 1}AvgScore`] ?? 0;
+    });
+    return out;
+  });
+}
+
+function sheetXml(name, rows) {
+  const safeName = xmlEscape(name).slice(0, 31);
   const headers = Array.from(rows.reduce((set, row) => {
     Object.keys(row).forEach(k => set.add(k));
     return set;
   }, new Set()));
-  const csv = "\ufeff" + [headers.map(escapeCsv).join(","), ...rows.map(r => headers.map(h => escapeCsv(r[h])).join(","))].join("\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const headerXml = `<Row>${headers.map(h => excelCell(h)).join("")}</Row>`;
+  const bodyXml = rows.map(row => `<Row>${headers.map(h => excelCell(row[h])).join("")}</Row>`).join("");
+  return `<Worksheet ss:Name="${safeName}"><Table>${headerXml}${bodyXml}</Table></Worksheet>`;
+}
+
+function downloadExcelWorkbook(result) {
+  if (!result || !result.rawRows || !result.rawRows.length) {
+    alert("다운로드할 Raw Data가 없습니다.");
+    return;
+  }
+  const detailRows = buildDetailDownloadRows(result);
+  const workbook = `<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal"><Alignment ss:Vertical="Center"/><Font ss:FontName="맑은 고딕" ss:Size="10"/></Style>
+ </Styles>
+ ${sheetXml("상세결과표", detailRows)}
+ ${sheetXml("RawData", result.rawRows)}
+</Workbook>`;
+  const blob = new Blob([workbook], { type: "application/vnd.ms-excel;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `bid_monte_carlo_raw_${new Date().toISOString().slice(0,10)}.csv`;
+  link.download = `bid_monte_carlo_result_${new Date().toISOString().slice(0,10)}.xls`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -1432,7 +1429,7 @@ document.querySelectorAll(".normal-mean, .normal-sd").forEach(input => input.add
 document.getElementById("runBtn").addEventListener("click", () => renderResult(runSimulation(collectInputs())));
 document.addEventListener("click", (event) => {
   if (event.target?.id === "gptCopyBtn") copyGptPayload();
-  if (event.target?.id === "downloadBtn") downloadCsv(latestResult?.rawRows);
+  if (event.target?.id === "downloadBtn") downloadExcelWorkbook(latestResult);
 });
 
 renderCompetitorInputs();
