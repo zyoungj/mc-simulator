@@ -1035,7 +1035,6 @@ function runSimulation(input) {
   const commentary = {
     targetWin: eligible.length ? `목표승률 ${targetWinRate}%를 충족하는 Winning Zone이 형성되었습니다.` : `목표승률 ${targetWinRate}%를 충족하는 Winning Zone은 형성되지 않았습니다.`,
     winRateTrend: highDropRow ? `SDS 평균 승률은 ${currency(maxWinRow.bid)}억 구간에서 가장 높으며, ${currency(highDropRow.bid)}억 이상부터 급격히 하락합니다.` : "SDS 평균 승률 변화폭이 상대적으로 완만하며 특정 급락구간은 제한적으로 나타났습니다.",
-    competition: dominantCompetitor ? `경쟁구도는 사실상 ${dominantCompetitor.name} 우세 구조로 분석되며, 기술 및 가격 경쟁력이 상대적으로 높게 형성되었습니다.` : "경쟁구도 분석을 위한 데이터가 충분하지 않습니다.",
     executive: eligible.length ? `목표승률을 충족하는 Winning Zone 구간을 확인했습니다.` : `목표승률을 충족하는 Winning Zone은 확인되지 않았습니다.`,
   };
 
